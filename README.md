@@ -4,7 +4,7 @@ This tool allows to encode TMX audio files for NFS ProStreet/Undercover/World ga
 
 ## Compiling from source
 
-In order to compiler tmxtool, you'll need JDK 11 and Maven. After that navigate to the folder with the source code, where _pom.xml_ is located and run:
+In order to compile tmxtool, you'll need JDK 11 and Maven. After that navigate to the folder with the source code, where _pom.xml_ is located and run:
 ```
 mvn clean package
 ```
