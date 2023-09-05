@@ -164,7 +164,7 @@
                         </GridPane>
                         <VBox alignment="TOP_RIGHT" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0">
                            <children>
-                              <Label text="v1.1" wrapText="true" />
+                              <Label text="v1.1.1" wrapText="true" />
                               <Label text="by The_Unpunished" textAlignment="RIGHT" />
                            </children>
                         </VBox>

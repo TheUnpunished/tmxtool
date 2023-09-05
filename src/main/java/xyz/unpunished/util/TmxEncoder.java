@@ -32,8 +32,8 @@ public class TmxEncoder {
                 new File(gin3)}
             : new File[]{new File(wavSnr),
                 new File(gin3),
-                new File(gin1),
-                new File(gin2)
+                new File(gin2),
+                new File(gin1)
             };
         File outFile;
         if(doExportPath)

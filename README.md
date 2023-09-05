@@ -12,4 +12,5 @@ After that, compiled jar will be located in _target_ folder. Enjoy!
 
 ## Changelog
 
-- 1.1 Initial public release
+- 1.1: Initial public release
+- 1.1.1: Fixed an issue where Half Throttle and Full Throttle GIN's were in reverse positions
