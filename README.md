@@ -14,3 +14,7 @@ After that, compiled jar will be located in _target_ folder. Enjoy!
 
 - 1.1: Initial public release
 - 1.1.1: Fixed an issue where Half Throttle and Full Throttle GIN's were in reverse positions
+- 1.2: Added translations, changed "Launch GINTool" logic
+
+## Contributing
+If you want to contribute to the project (add a translation, etc.), don't hesitate to make pull requests. Example messages file can be seen here: [messages_en.properties](../main/src/main/resources/i18n/messages_en.properties)
