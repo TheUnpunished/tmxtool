@@ -60,9 +60,8 @@ public class TmxEncoder {
             ex.printStackTrace();
             AlertWorker.showAlert(
                     Alert.AlertType.ERROR,
-                    "tmxtool",
-                    "Error",
-                    "File error: failed to encode/loop SNR");
+                    I18N.get("error"),
+                    I18N.get("snr_failed"));
             return false;
         }
         files[ai ? 1 : 0] = new File(wavSnr);
@@ -80,9 +79,8 @@ public class TmxEncoder {
             ex.printStackTrace();
             AlertWorker.showAlert(
                     Alert.AlertType.ERROR,
-                    "tmxtool",
-                    "Error",
-                    "File error: failed to create an output file");
+                    I18N.get("error"),
+                    I18N.get("output_create_failed"));
             return false;
         }
         InputStream base;
@@ -223,9 +221,8 @@ public class TmxEncoder {
         }
         catch(IOException ex){
             AlertWorker.showAlert(Alert.AlertType.ERROR,
-                    "tmxtool",
-                    exportPath, 
-                    "File error: HexEngine failed to encode TMX");
+                    I18N.get("error"), 
+                    I18N.get("engine_failed"));
         }
         return true;   
     }

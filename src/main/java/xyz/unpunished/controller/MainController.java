@@ -3,9 +3,11 @@ package xyz.unpunished.controller;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 
 import java.io.*;
 import java.net.URL;
@@ -15,10 +17,13 @@ import java.util.*;
 import javafx.collections.FXCollections;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.layout.HBox;
 import lombok.Getter;
 import org.apache.commons.io.FilenameUtils;
 import xyz.unpunished.util.AlertWorker;
+import xyz.unpunished.util.I18N;
 import xyz.unpunished.util.IniWorker;
 import xyz.unpunished.util.TmxEncoder;
 import xyz.unpunished.util.TmxExtractor;
@@ -69,6 +74,8 @@ public class MainController implements Initializable {
     private HBox blackBoxPatternBox;
     @FXML
     private HBox gin2Box;
+    @FXML
+    private ComboBox <Locale> languageBox;
 
 
     @Override
@@ -90,7 +97,45 @@ public class MainController implements Initializable {
         engExhBox.setItems(FXCollections.observableArrayList(typeNames));
         playerAIBox.setItems(FXCollections.observableArrayList(appends));
         tmxBaseBox.setItems(FXCollections.observableArrayList(baseNames));
+        Callback<ListView<Locale>, ListCell<Locale>> factory = lv -> new ListCell<Locale>() {
+            @Override
+            protected void updateItem(Locale locale, boolean empty) {
+                super.updateItem(locale, empty);
+                setText(empty ? "" : locale.getDisplayName());
+            }
+        };
+        languageBox.setCellFactory(factory);
+        languageBox.setItems(FXCollections.observableArrayList(I18N.getSupportedLocales()));
+        languageBox.setButtonCell(factory.call(null));
         readIniWorkerValues();
+        languageBox.valueProperty().addListener((ov, t, t1) -> {
+            if(!I18N.getLocale().equals(t1)){
+                iniWorker.setLocale(t1);
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setHeaderText(I18N.get("confirmation"));
+                alert.setContentText(I18N.get("restart_now"));
+                alert.setTitle(I18N.get("tool_name"));
+                Optional<ButtonType> bt = alert.showAndWait();
+                if(bt.get().equals(ButtonType.OK)){
+                    fileThread.interrupt();
+                    iniWorker.rewriteIni(iniWorker.getDefaultIni());
+                    ProcessBuilder pb = new ProcessBuilder("launchTMX.bat");
+                    pb = pb.inheritIO();
+                    try {
+                        pb.start();
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                        AlertWorker.showAlert(Alert.AlertType.ERROR,
+                                I18N.get("error"),
+                                I18N.get("error"));
+                        iniWorker.setLocale(t);
+                        languageBox.setValue(t);
+                        return;
+                    }
+                    System.exit(0);
+                }
+            }
+        });
         customPath.selectedProperty().addListener((ov, t, t1) -> {
             customPathBox.setDisable(t);
             iniWorker.setCustomOutput(t1);
@@ -238,8 +283,8 @@ public class MainController implements Initializable {
         playerAIBox.getSelectionModel().select(iniWorker.getAppend());
         tmxBaseBox.getSelectionModel().select(iniWorker.getTmxType());
         minRPM.setSelected(iniWorker.isMinRPM());
-        minRPMField.setText(String.format("%.2f", iniWorker.getMinRPMVal()));
-        maxRPMField.setText(String.format("%.2f", iniWorker.getMaxRPMVal()));
+        minRPMField.setText(String.format(Locale.ENGLISH, "%.2f", iniWorker.getMinRPMVal()));
+        maxRPMField.setText(String.format(Locale.ENGLISH, "%.2f", iniWorker.getMaxRPMVal()));
         encodeToEAL3.setSelected(iniWorker.isEncodeSnr());
         loopSNR.setSelected(iniWorker.isLoopSnr());
         tmxExtractorField.setText(iniWorker.getExtractPath());
@@ -248,6 +293,7 @@ public class MainController implements Initializable {
         gin2Box.setDisable(iniWorker.getTmxType() != 0);
         loopSNR.setDisable(!iniWorker.isEncodeSnr());
         minRPMField.setDisable(!iniWorker.isMinRPM());
+        languageBox.setValue(iniWorker.getLocale());
     }
 
     private String browseFile(String initialDirectory, String[] fileTypes, String[] fileTypeNames,
@@ -262,7 +308,7 @@ public class MainController implements Initializable {
         }
         if(fileTypes.length > 1){
             FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter(
-                    "All Supported Audio Files",
+                    I18N.get("all_supported"),
                     fileTypes
             );
             fc.getExtensionFilters().add(filter);
@@ -311,9 +357,8 @@ public class MainController implements Initializable {
             if(encoder.encodeTmx()){
                 AlertWorker.showAlert(
                         Alert.AlertType.INFORMATION,
-                        "tmxtool",
-                        "Information",
-                        "TMX has been encoded");
+                        I18N.get("success"),
+                        I18N.get("tmx_encoded"));
             }
         }
     }
@@ -343,9 +388,8 @@ public class MainController implements Initializable {
         catch(Exception ex){
             AlertWorker.showAlert(
                     Alert.AlertType.ERROR,
-                    "tmxtool",
-                    "Error",
-                    "All main inputs should be filled");
+                    I18N.get("error"),
+                    I18N.get("inputs_filled"));
             return false;
         }
         // minRPM < maxRPM
@@ -363,30 +407,24 @@ public class MainController implements Initializable {
         catch (NumberFormatException ex){
             AlertWorker.showAlert(
                     Alert.AlertType.ERROR,
-                    "tmxtool",
-                    "Error",
-                    "RPM Value error, maxRPM should be bigger than "
-                    + "minRPM and minRPM should be bigger than 200");
+                    I18N.get("error"),
+                    I18N.get("max_over_min"));
             return false;
         }
         if(customPath.isSelected())
             if(customPathField.getText().equals("") || customPathField.getText() == null){
                 AlertWorker.showAlert(
                     Alert.AlertType.ERROR,
-                    "tmxtool",
-                    "Error",
-                    "Please select custom outputh path or unselect "
-                            + "the checkbox");
+                    I18N.get("error"),
+                    I18N.get("custom_output_not_selected"));
                 return false;
             }
         if(blackBoxPattern.isSelected())
             if(carNumberField.getText().equals("") || carNumberField.getText().equals("")){
                 AlertWorker.showAlert(
                     Alert.AlertType.ERROR,
-                    "tmxtool",
-                    "Error",
-                    "Please select and fill all the Black Box file pattern fields "
-                            + "or unselect the checkbox");
+                    I18N.get("error"),
+                    I18N.get("car_number_not_filled"));
                 return false;
             }
         return true; 
@@ -395,42 +433,41 @@ public class MainController implements Initializable {
     @FXML
     private void browseWavSnr(){
         wavSnrFileField.setText(browseFile(wavSnrFileField.getText(), new String[]{"*.wav", "*snr"},
-                new String[]{"Waveform Audio File",
-                            "SNR Audio File"}, false));
+                new String[]{I18N.get("wav_file"),
+                            I18N.get("snr_file")}, false));
     }
 
     @FXML
     private void browseGin1(){
-        gin1Field.setText(browseFile(gin1Field.getText(), new String[]{"*.gin"}, new String[]{"Ginsu Audio File"}, false));
+        gin1Field.setText(browseFile(gin1Field.getText(), new String[]{"*.gin"}, new String[]{I18N.get("gin_file")}, false));
     }
 
     @FXML
     private void browseGin2(){
-        gin2Field.setText(browseFile(gin2Field.getText(), new String[]{"*.gin"}, new String[]{"Ginsu Audio File"}, false));
+        gin2Field.setText(browseFile(gin2Field.getText(), new String[]{"*.gin"}, new String[]{I18N.get("gin_file")}, false));
     }
 
     @FXML
     private void browseGin3(){
-        gin3Field.setText(browseFile(gin3Field.getText(), new String[]{"*.gin"}, new String[]{"Ginsu Audio File"}, false));
+        gin3Field.setText(browseFile(gin3Field.getText(), new String[]{"*.gin"}, new String[]{I18N.get("gin_file")}, false));
     }
     
     @FXML
     private void browseCustomPath(){
-        customPathField.setText(browseFile(customPathField.getText(), new String[]{"*.tmx"}, new String[]{"TMX Audio File"}, true));
+        customPathField.setText(browseFile(customPathField.getText(), new String[]{"*.tmx"}, new String[]{I18N.get("tmx_file")}, true));
     }
     
     @FXML
     private void browseTmxExtract(){
-        tmxExtractorField.setText(browseFile(tmxExtractorField.getText(), new String[]{"*.tmx"}, new String[]{"TMX Audio File"}, false));
+        tmxExtractorField.setText(browseFile(tmxExtractorField.getText(), new String[]{"*.tmx"}, new String[]{I18N.get("tmx_file")}, false));
     }
     
     private boolean checkExtractField(){
         if(tmxExtractorField.getText() == null || tmxExtractorField.getText().equals("")){
             AlertWorker.showAlert(
                     Alert.AlertType.ERROR,
-                    "tmxtool",
-                    "Error",
-                    "No file to extract is selected");
+                    I18N.get("error"),
+                    I18N.get("no_file_to_extract"));
             return false;
         }
         return true;
@@ -443,20 +480,15 @@ public class MainController implements Initializable {
             if(extractor.extractTmx())
                 AlertWorker.showAlert(
                     Alert.AlertType.INFORMATION,
-                    "tmxtool",
-                    "Success",
-                    "TMX file extracted");
+                    I18N.get("success"),
+                    I18N.get("tmx_extracted"));
         }
     }
     
     @FXML
     private void launchGinTool(){
-        if (iniWorker.getJavaPath() != null 
-                && FilenameUtils.getName(iniWorker.getJavaPath())
-                        .toLowerCase().equals("java.exe")){
-            ProcessBuilder builder = new ProcessBuilder(iniWorker.getJavaPath(),
-                "-jar",
-                Paths.get(System.getProperty("user.dir"), "gintool.jar").toString());
+    	if (!iniWorker.isFirstLaunch()){
+            ProcessBuilder builder = new ProcessBuilder("launchGIN.bat");
             builder = builder.inheritIO();
             builder = builder.directory(new File(System.getProperty("user.dir")));
             try{
@@ -466,23 +498,17 @@ public class MainController implements Initializable {
                 ex.printStackTrace();
                 AlertWorker.showAlert(
                         Alert.AlertType.ERROR,
-                        "tmxtool",
-                        "Error",
-                        "File error: gintool.jar or "
-                        + "java.exe doesn't exist or process failed to start");
-                iniWorker.setJavaPath("");
+                        I18N.get("error"),
+                        I18N.get("gintool_error"));
+                iniWorker.setFirstLaunch(true);
             }
         }
         else{
             AlertWorker.showAlert(
                         Alert.AlertType.INFORMATION,
-                        "tmxtool",
-                        "Information",
-                        "Please select bin/java.exe inside of your JDK 11 "
-                        + "and ensure gintool.jar is in the same folder as tmxtool "
-                        + "to make sure it works");
-            iniWorker.setJavaPath(browseFile(System.getProperty("user.dir"),
-                    new String[]{"java.exe"}, new String[]{"Java Exectuable"}, false));
+                        I18N.get("information"),
+                        I18N.get("gintool_warning"));
+            iniWorker.setFirstLaunch(false);
         }
     }
 

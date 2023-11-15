@@ -18,37 +18,37 @@
    <children>
       <SplitPane dividerPositions="0.5" prefHeight="160.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <items>
-          <AnchorPane maxWidth="-Infinity" minWidth="221.0" SplitPane.resizableWithParent="false">
+          <AnchorPane maxWidth="221.0" SplitPane.resizableWithParent="false">
                <children>
-                  <Label layoutX="14.0" layoutY="6.0" text="Main" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0" />
-                  <VBox layoutX="10.0" layoutY="36.0" spacing="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="35.0">
+                  <Label layoutX="14.0" layoutY="6.0" text="%main" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0" />
+                  <VBox layoutX="10.0" layoutY="36.0" spacing="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="35.0">
                      <children>
                         <VBox spacing="2.0">
                            <children>
-                              <Label text="wav/snr (idle)" />
-                              <HBox>
+                              <Label maxWidth="201.0" text="%wav_snr" />
+                              <HBox spacing="5.0">
                                  <children>
-                                    <TextField fx:id="wavSnrFileField" editable="false" prefHeight="25.0" prefWidth="172.0" />
-                                    <Button ellipsisString="B" mnemonicParsing="false" onAction="#browseWavSnr" prefHeight="25.0" prefWidth="29.0" text="..." />
+                                    <TextField fx:id="wavSnrFileField" editable="false" prefWidth="172.0" />
+                                    <Button ellipsisString="B" mnemonicParsing="false" onAction="#browseWavSnr" prefWidth="29.0" text="..." />
                                  </children>
                               </HBox>
                            </children>
                         </VBox>
                         <VBox spacing="2.0">
                            <children>
-                              <Label text="gin 1 (accel/full throttle)" />
-                              <HBox>
+                              <Label maxWidth="201.0" text="%gin1" />
+                              <HBox spacing="5.0">
                                  <children>
-                                    <TextField fx:id="gin1Field" editable="false" prefHeight="25.0" prefWidth="172.0" />
-                                    <Button ellipsisString="B" mnemonicParsing="false" onAction="#browseGin1" prefHeight="25.0" prefWidth="29.0" text="..." />
+                                    <TextField fx:id="gin1Field" editable="false" prefWidth="172.0" />
+                                    <Button ellipsisString="B" mnemonicParsing="false" onAction="#browseGin1" prefWidth="29.0" text="..." />
                                  </children>
                               </HBox>
                            </children>
                         </VBox>
                         <VBox spacing="2.0">
                            <children>
-                              <Label text="gin 2 (accel/half throttle)" />
-                              <HBox fx:id="gin2Box">
+                              <Label maxWidth="201.0" text="%gin2" />
+                              <HBox fx:id="gin2Box" spacing="5.0">
                                  <children>
                                     <TextField fx:id="gin2Field" editable="false" prefHeight="25.0" prefWidth="172.0" />
                                     <Button ellipsisString="B" mnemonicParsing="false" onAction="#browseGin2" prefHeight="25.0" prefWidth="29.0" text="..." />
@@ -58,8 +58,8 @@
                         </VBox>
                         <VBox spacing="2.0">
                            <children>
-                              <Label text="gin 3 (decel)" />
-                              <HBox>
+                              <Label maxWidth="201.0" text="%gin3" />
+                              <HBox spacing="5.0">
                                  <children>
                                     <TextField fx:id="gin3Field" editable="false" prefHeight="25.0" prefWidth="172.0" />
                                     <Button ellipsisString="B" mnemonicParsing="false" onAction="#browseGin3" prefHeight="25.0" prefWidth="29.0" text="..." />
@@ -71,13 +71,13 @@
                            <children>
                               <VBox spacing="5.0">
                                  <children>
-                                    <CheckBox fx:id="minRPM" mnemonicParsing="false" text="Min RPM" />
+                                    <CheckBox fx:id="minRPM" maxWidth="98.0" mnemonicParsing="false" text="%min_rpm" />
                                     <TextField fx:id="minRPMField" disable="true" prefWidth="98.0" />
                                  </children>
                               </VBox>
                               <VBox spacing="5.0">
                                  <children>
-                                    <Label text="Max RPM" />
+                                    <Label maxWidth="98.0" text="%max_rpm" />
                                     <TextField fx:id="maxRPMField" prefWidth="98.0" />
                                  </children>
                               </VBox>
@@ -85,20 +85,24 @@
                         </HBox>
                      </children>
                   </VBox>
-                  <Button layoutX="119.0" layoutY="259.0" mnemonicParsing="false" onAction="#generateTmx" prefWidth="101.0" text="Generate TMX" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="60.0" />
+                  <HBox alignment="CENTER" layoutX="65.0" layoutY="313.0" prefHeight="25.0" prefWidth="148.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
+                     <children>
+                        <Button alignment="CENTER" maxWidth="201.0" mnemonicParsing="false" onAction="#generateTmx" text="%generate_tmx" textAlignment="CENTER" />
+                     </children>
+                  </HBox>
                </children>
             </AnchorPane>
-            <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" SplitPane.resizableWithParent="false">
+            <SplitPane dividerPositions="0.5718390804597702" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" SplitPane.resizableWithParent="false">
               <items>
                 <AnchorPane minHeight="190.0" SplitPane.resizableWithParent="false">
                      <children>
-                        <Label layoutX="21.0" layoutY="6.0" text="Optional" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0" />
+                        <Label layoutX="21.0" layoutY="6.0" text="%optional" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0" />
                         <VBox layoutX="10.0" layoutY="41.0" spacing="7.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="35.0">
                            <children>
                               <VBox spacing="5.0">
                                  <children>
-                                    <CheckBox fx:id="customPath" mnemonicParsing="false" text="Custom output path" />
-                                    <HBox fx:id="customPathBox">
+                                    <CheckBox fx:id="customPath" mnemonicParsing="false" text="%custom_output" />
+                                    <HBox fx:id="customPathBox" spacing="5.0">
                                        <children>
                                           <TextField fx:id="customPathField" editable="false" minWidth="270.0" />
                                           <Button maxWidth="30.0" mnemonicParsing="false" onAction="#browseCustomPath" text="Button" />
@@ -108,7 +112,7 @@
                               </VBox>
                               <VBox>
                                  <children>
-                                    <CheckBox fx:id="blackBoxPattern" mnemonicParsing="false" text="Black Box file pattern" />
+                                    <CheckBox fx:id="blackBoxPattern" mnemonicParsing="false" text="%black_box_pattern" />
                                     <HBox fx:id="blackBoxPatternBox" alignment="BOTTOM_LEFT" prefHeight="31.0" prefWidth="184.0" spacing="2.0">
                                        <children>
                                           <Label text="car_">
@@ -130,12 +134,12 @@
                               </VBox>
                               <HBox alignment="CENTER_LEFT" spacing="8.0">
                                  <children>
-                                    <Label prefWidth="55.0" text="TMX Type" />
+                                    <Label prefWidth="55.0" text="%tmx_type" />
                                     <ComboBox fx:id="tmxBaseBox" prefWidth="80.0" />
                                     <VBox spacing="5.0">
                                        <children>
-                                          <CheckBox fx:id="encodeToEAL3" mnemonicParsing="false" text="Encode .snr to EALayer3" />
-                                          <CheckBox fx:id="loopSNR" mnemonicParsing="false" text="Loop it of not looped" />
+                                          <CheckBox fx:id="encodeToEAL3" mnemonicParsing="false" text="%encode_to_eal3" />
+                                          <CheckBox fx:id="loopSNR" mnemonicParsing="false" text="%loop" />
                                        </children>
                                     </VBox>
                                  </children>
@@ -144,9 +148,9 @@
                         </VBox>
                      </children>
                   </AnchorPane>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" SplitPane.resizableWithParent="false">
                      <children>
-                        <Label layoutX="63.0" layoutY="14.0" text="TMX Extractor" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0" />
+                        <Label layoutX="63.0" layoutY="14.0" text="%tmx_extractor" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0" />
                         <GridPane hgap="5.0" vgap="5.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="35.0">
                           <columnConstraints>
                             <ColumnConstraints hgrow="SOMETIMES" maxWidth="243.0" minWidth="10.0" prefWidth="238.0" />
@@ -157,18 +161,19 @@
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
-                              <Button maxWidth="60.0" mnemonicParsing="false" onAction="#browseTmxExtract" text="Browse" GridPane.columnIndex="1" />
-                              <TextField fx:id="tmxExtractorField" editable="false" prefWidth="230.0" />
-                              <Button maxWidth="60.0" mnemonicParsing="false" onAction="#extractTmx" text="Extract" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.valignment="TOP" />
+                              <Button maxWidth="60.0" mnemonicParsing="false" onAction="#browseTmxExtract" text="%browse" GridPane.columnIndex="1" />
+                              <TextField fx:id="tmxExtractorField" editable="false" maxWidth="240.0" />
+                              <Button maxWidth="60.0" mnemonicParsing="false" onAction="#extractTmx" text="%extract" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.valignment="TOP" />
+                              <ComboBox fx:id="languageBox" maxWidth="240.0" GridPane.rowIndex="1" GridPane.valignment="TOP" />
                            </children>
                         </GridPane>
                         <VBox alignment="TOP_RIGHT" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0">
                            <children>
-                              <Label text="v1.1.1" wrapText="true" />
-                              <Label text="by The_Unpunished" textAlignment="RIGHT" />
+                              <Label text="%version" wrapText="true" />
+                              <Label text="%by" textAlignment="RIGHT" />
                            </children>
                         </VBox>
-                        <Button layoutX="10.0" layoutY="113.0" mnemonicParsing="false" onAction="#launchGinTool" text="Launch GINTool" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" />
+                        <Button layoutX="10.0" layoutY="113.0" mnemonicParsing="false" onAction="#launchGinTool" text="%launch_gintool" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" />
                      </children>
                   </AnchorPane>
               </items>

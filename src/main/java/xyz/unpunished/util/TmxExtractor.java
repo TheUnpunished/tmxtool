@@ -46,9 +46,8 @@ public class TmxExtractor {
                 default:
                     PlatformImpl.runAndWait(() -> AlertWorker.showAlert(
                             Alert.AlertType.ERROR,
-                            "tmxtool", 
-                            "Error",
-                            "File error: failed to detect endianness"));
+                            I18N.get("error"),
+                            I18N.get("endian_error")));
                     return false;
             }
             HexEngine.skip(is, 16);
@@ -75,9 +74,8 @@ public class TmxExtractor {
                     else{
                         PlatformImpl.runAndWait(() -> AlertWorker.showAlert(
                             Alert.AlertType.ERROR,
-                            "tmxtool", 
-                            "Error",
-                            "File error: failed to detect one of file types"));
+                            I18N.get("error"),
+                            I18N.get("file_type_error")));
                         return false;
                     }
                 HexEngine.skip(is, 4);
@@ -112,10 +110,8 @@ public class TmxExtractor {
             ex.printStackTrace();
             AlertWorker.showAlert(
                     Alert.AlertType.ERROR,
-                    "tmxtool",
-                    "Error",
-                    "File error: Failed to read from or write to "
-                    + "one of the files. Check for read/write permissions");
+                    I18N.get("error"),
+                    I18N.get("file_io_error"));
         }
         return true;
     }

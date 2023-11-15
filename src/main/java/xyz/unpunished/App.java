@@ -1,5 +1,7 @@
 package xyz.unpunished;
 
+import java.util.Locale;
+import java.util.ResourceBundle;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -7,11 +9,16 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import xyz.unpunished.controller.MainController;
+import xyz.unpunished.util.I18N;
+import xyz.unpunished.util.IniWorker;
 
 public class App extends Application {
     @Override
     public void start(Stage stage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/static/main.fxml"));
+        IniWorker iniWorker = new IniWorker("tmxtool.ini");
+        ResourceBundle bundle = ResourceBundle.getBundle("i18n/messages", iniWorker.getLocale());
+        I18N.setLocale(iniWorker.getLocale());
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/static/main.fxml"), bundle);
         Parent root = loader.load();
         MainController controller = loader.getController();
         Scene scene = new Scene(root);
@@ -20,7 +27,7 @@ public class App extends Application {
             controller.getIniWorker().rewriteIni(controller.getIniWorker().getDefaultIni());
             System.exit(0);
         });
-        stage.setTitle("tmxtool");
+        stage.setTitle(I18N.get("tool_name"));
         stage.setResizable(false);
         stage.getIcons().add(new Image(getClass().getResourceAsStream("/static/icon.png")));
         stage.setScene(scene);

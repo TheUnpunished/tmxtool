@@ -1,0 +1,1 @@
+java -jar target/tmxtool.jar

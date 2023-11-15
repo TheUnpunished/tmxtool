@@ -4,6 +4,7 @@ import javafx.scene.control.Alert;
 import lombok.Getter;
 
 import java.io.*;
+import java.util.Locale;
 import lombok.Setter;
 
 @Getter
@@ -28,7 +29,8 @@ public class IniWorker {
     private float minRPMVal;
     private float maxRPMVal;
     private String extractPath;
-    private String javaPath;
+    private boolean firstLaunch;
+    private Locale locale;
     
     public void initIni(){
         wavSnrPath = "";
@@ -48,7 +50,8 @@ public class IniWorker {
         minRPMVal = (float) 0.0;
         maxRPMVal = (float) 0.0;
         extractPath = "";
-        javaPath = "";
+        firstLaunch = true;
+        locale = Locale.ENGLISH;
     }
 
     public IniWorker(String iniName){
@@ -91,20 +94,20 @@ public class IniWorker {
             minRPMVal = Float.parseFloat(readLine(reader));
             maxRPMVal = Float.parseFloat(readLine(reader));
             extractPath = readLine(reader);
-            javaPath = readLine(reader);
+            firstLaunch = Boolean.parseBoolean(readLine(reader));
+            locale = Locale.forLanguageTag(readLine(reader));
         }
-        catch (IOException | NumberFormatException | NullPointerException e){
+        catch (IOException | NumberFormatException | NullPointerException | IndexOutOfBoundsException e){
             e.printStackTrace();
             initIni();
             AlertWorker.showAlert(Alert.AlertType.ERROR,
-                    "tmxtool",
-                    "Error",
-                    "tmxtool couldn't read .ini file");
+                    I18N.get("error"),
+                    I18N.get("couldnt_read_ini"));
             rewriteIni(defaultIni);
         }
     }
     
-    private String readLine(BufferedReader reader) throws IOException{
+    private String readLine(BufferedReader reader) throws IOException, IndexOutOfBoundsException {
         return reader.readLine().split("\\s+=\\s+", 2)[1];
     }
 
@@ -125,19 +128,19 @@ public class IniWorker {
             bw.write("encodeSnr = " + encodeSnr); bw.newLine();
             bw.write("loopSnr = " + loopSnr); bw.newLine();
             bw.write("minRPM = " + minRPM); bw.newLine();
-            bw.write("minRPMVal = " + String.format("%.2f", minRPMVal)); bw.newLine();
-            bw.write("maxRPMVal = " + String.format("%.2f", maxRPMVal)); bw.newLine();
+            bw.write("minRPMVal = " + String.format(Locale.ENGLISH, "%.2f", minRPMVal)); bw.newLine();
+            bw.write("maxRPMVal = " + String.format(Locale.ENGLISH, "%.2f", maxRPMVal)); bw.newLine();
             bw.write("extractPath = " + extractPath); bw.newLine();
-            bw.write("javaPath = " + extractPath); bw.newLine();
+            bw.write("firstLaunch = " + firstLaunch); bw.newLine();
+            bw.write("locale = " + locale.toLanguageTag());
             bw.flush();
             bw.close();
         }
         catch (IOException e){
             e.printStackTrace();
             AlertWorker.showAlert(Alert.AlertType.ERROR,
-                    "tmxtool",
-                    "Error",
-                    "tmxtool failed to write to .ini file");
+                    I18N.get("error"),
+                    I18N.get("couldnt_write_ini"));
         }
     }
 
