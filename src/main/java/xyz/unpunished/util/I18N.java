@@ -17,7 +17,8 @@ public final class I18N {
     public static List<Locale> getSupportedLocales() {
         return new ArrayList<>(Arrays.asList(
                 Locale.ENGLISH,
-                new Locale("ru", "RU")));
+                new Locale("ru", "RU"),
+                new Locale("ro", "RO")));
     }
     
     
